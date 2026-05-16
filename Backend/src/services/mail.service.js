@@ -16,11 +16,11 @@ const transporter = nodemailer.createTransport({
 
 // Verify the connection configuration
 transporter.verify()
-.then(() => {console.log('Email transporter is ready to send messages');})
-.catch((error) => {console.error('Error setting up email transporter', error);});
+  .then(() => { console.log('Email transporter is ready to send messages'); })
+  .catch((error) => { console.error('Error setting up email transporter', error); });
 
 export async function sendEmail({ to, subject, text, html }) {
-    console.log("TO:", to);
+  console.log("TO:", to);
   const mailOptions = {
     from: process.env.GOOGLE_USER,
     to,

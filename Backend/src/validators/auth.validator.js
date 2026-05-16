@@ -1,11 +1,14 @@
 import { body, validationResult } from 'express-validator';
+import userModel from '../models/user.model.js';
 
 export const registerValidation = [
 
     body('email')
         .trim()
         .notEmpty().withMessage('Email is required')
-        .isEmail().withMessage('Please provide a valid email'),
+        .isEmail().withMessage('Please provide a valid email')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).withMessage('Please provide a valid email address'),
+        
 
     body('username')
         .trim()
@@ -25,6 +28,23 @@ export const registerValidation = [
     },
 ];
 
-export default registerValidation;
+export const loginValidation = [
+
+    body('email')
+        .trim()
+        .notEmpty().withMessage('Email is required')
+        .isEmail().withMessage('Please provide a valid email'),
+
+    body('password')
+       .notEmpty().withMessage("Password is required"),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+        return next();
+    },
+];
+
+export default { loginValidation, registerValidation };
 
 
