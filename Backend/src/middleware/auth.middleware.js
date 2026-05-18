@@ -1,8 +1,10 @@
+import userModel from '../models/user.model.js';
+import redis from '../config/cache.js';
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 dotenv.config();
 
-export function authUser(req, res, next) {
+export async function authUser(req, res, next) {
     const token = req.cookies.token;
 
     if (!token) {
@@ -10,6 +12,15 @@ export function authUser(req, res, next) {
             message: 'Unauthorized',
             success: false,
             err: "no token provided"
+        });
+    }
+    const isTokenBlacklisted = await redis.get(token);
+
+    if (isTokenBlacklisted) {
+        return res.status(401).json({
+            message: 'Unauthorized',
+            success: false,
+            err: "token is blacklisted"
         });
     }
     try {

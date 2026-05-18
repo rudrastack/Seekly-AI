@@ -4,9 +4,9 @@ import { sendEmail } from '../services/mail.service.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { compare } from 'bcrypt';
+import redis from '../config/cache.js';
 
 dotenv.config();
-
 
 
 export async function register(req, res) {
@@ -137,6 +137,20 @@ export async function getMe(req, res) {
         message: 'User fetched successfully',
         success: true,
         user
+    });
+}
+
+export async function logout(req, res) {
+    const token = req.cookies.token;
+
+
+    await redis.set(`bl:${token}`, Date.now().toString(), 'EX',  60 * 60);// blacklist token for 1 hour
+     
+    res.clearCookie('token');   
+
+    return res.status(200).json({
+        message: 'User logged out successfully',
+        success: true,
     });
 }
 
