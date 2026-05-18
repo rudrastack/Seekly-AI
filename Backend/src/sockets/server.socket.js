@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import cors from "cors";
 
 let io;
 
@@ -6,7 +7,8 @@ export const initSocketServer = (server) => {
   io = new Server(server, {
     cors: {
       origin: "http://localhost:5173",
-      withCredentials: true,
+      methods: ["GET", "POST"],
+      credentials: true,
     },
   });
 
