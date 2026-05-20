@@ -7,31 +7,32 @@ export async function sendMessage(req, res) {
 
     const { message, chat: chatId } = req.body;
 
+    let chat = null;
+
     const titile = await generatChatTitle(message);
 
-    let title = null, chat = null;
 
-    if (!chat) {
-        const chat = await chatModel.create({
+    if (!chatId) {
+        chat = await chatModel.create({
             user: req.user.id,
             title: titile
         });
-
     }
 
+    const activeChatId = chatId || chat._id;
 
     const userMessage = await messageModel.create({
-        chat: chatId || chat._id,
+        chat: activeChatId,
         role: 'user',
         content: message
     });
 
-    const messages = await messageModel.find({ chat: chatId });
-   
+    const messages = await messageModel.find({ chat: activeChatId });
+
     const result = await generateResponse(messages);
 
     const aiMessage = await messageModel.create({
-        chat: chatId || chat._id,
+        chat: activeChatId,
         role: 'ai',
         content: result
     });
@@ -46,3 +47,70 @@ export async function sendMessage(req, res) {
     });
 }
 
+export async function getChats(req, res) {
+
+    const user = req.user
+
+    const chats = await chatModel.find({ user: user.id });
+
+    return res.status(200).json({
+        message: 'Chats fetched successfully',
+        success: true,
+        chats
+    });
+}
+
+export async function getMessages(req, res) {
+    const { chatId } = req.params
+
+    const chat = await chatModel.findOne({
+        _id: chatId,
+        user: req.user.id
+    })
+
+    if (!chat) {
+        return res.status(404).json({
+            message: 'Chat not found',
+            success: false,
+            err: "Chat not found"
+        });
+    }
+
+    const messages = await messageModel.find({ chat: chatId });
+
+
+    return res.status(200).json({
+        message: 'Messages fetched successfully',
+        success: true,
+        messages
+    });
+}
+
+export async function deleteChat(req, res) {
+    const { chatId } = req.params
+
+    const chat = await chatModel.findOneAndDelete({
+        _id: chatId,
+        user: req.user.id
+    })
+
+    await messageModel.deleteMany({
+        chat: chatId
+    });
+
+    if (!chat) {
+        return res.status(404).json({
+            message: 'Chat not found',
+            success: false,
+            err: "Chat not found"
+        });
+    }
+
+    return res.status(200).json({
+        message: 'Chat deleted successfully',
+        success: true,
+        chat
+    });
+
+
+}

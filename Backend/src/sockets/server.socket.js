@@ -15,7 +15,7 @@ export const initSocketServer = (server) => {
   console.log("Socket.io initialized");
 
   io.on("connection", (socket) => {
-      console.log("A user connected:"+ socket.id);
+    console.log("A user connected:" + socket.id);
   })
 };
 

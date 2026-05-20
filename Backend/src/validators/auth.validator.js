@@ -8,7 +8,7 @@ export const registerValidation = [
         .notEmpty().withMessage('Email is required')
         .isEmail().withMessage('Please provide a valid email')
         .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).withMessage('Please provide a valid email address'),
-        
+
 
     body('username')
         .trim()
@@ -36,7 +36,7 @@ export const loginValidation = [
         .isEmail().withMessage('Please provide a valid email'),
 
     body('password')
-       .notEmpty().withMessage("Password is required"),
+        .notEmpty().withMessage("Password is required"),
 
     (req, res, next) => {
         const errors = validationResult(req);

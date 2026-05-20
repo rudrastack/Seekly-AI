@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { register,login, getMe, verifyEmail, logout } from "../controllers/auth.controller.js";
-import {registerValidation, loginValidation} from "../validators/auth.validator.js";
+import { register, login, getMe, verifyEmail, logout } from "../controllers/auth.controller.js";
+import { registerValidation, loginValidation } from "../validators/auth.validator.js";
 import { authUser } from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
+
 /** 
  * @route POST /api/auth/register
  * @desc Register a new user
@@ -11,7 +12,6 @@ const authRouter = Router();
  * @body {email, username, password}
  */
 authRouter.post('/register', registerValidation, register);
-
 
 /** 
  * @route POST /api/auth/login
