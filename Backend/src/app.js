@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.route.js';
+import chatRoutes from './routes/chat.route.js';
 
 
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/api/auth', authRoutes);
+app.use('/api/chats', chatRoutes);
 
 // Example route
 app.get('/', (req, res) => {
