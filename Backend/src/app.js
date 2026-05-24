@@ -5,7 +5,6 @@ import authRoutes from './routes/auth.route.js';
 import chatRoutes from './routes/chat.route.js';
 
 
-
 const app = express();
 app.use(cors({
   origin: 'http://localhost:5173',

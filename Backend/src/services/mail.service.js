@@ -13,6 +13,8 @@ const transporter = nodemailer.createTransport({
     refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
   },
 });
+  console.log("refresh token", process.env.GOOGLE_REFRESH_TOKEN);
+
 
 // Verify the connection configuration
 transporter.verify()

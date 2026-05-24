@@ -6,10 +6,10 @@ import { setUser,setLoading,setError } from "../auth.slice";
 export function useAuth() {
     const dispatch = useDispatch();
 
-    async function handleRegister(name, email, password) {
+    async function handleRegister(payload) {
         try{
             dispatch(setLoading(true));
-            const data = await register(name, email, password);
+            const data = await register(payload.username, payload.email, payload.password);
             dispatch(setUser(data));
         } catch (error) {
             dispatch(setError(error.response?.data?.message || "Registration failed"));
@@ -18,10 +18,10 @@ export function useAuth() {
         }
     }
 
-        async function handleLogin(email, password) {
+        async function handleLogin(payload) {
         try{
             dispatch(setLoading(true));
-            const data = await login(email, password);
+            const data = await login(payload.email, payload.password);
             dispatch(setUser(data));
         } catch (error) {
             dispatch(setError(error.response?.data?.message || "Login failed"));

@@ -122,7 +122,7 @@ export async function login(req, res) {
 export async function getMe(req, res) {
    
     const userId = req.user.id;
-
+  
     const user = await userModel.findById(req.user.id).select('-password');
 
     if (!user) {
@@ -132,6 +132,8 @@ export async function getMe(req, res) {
             err: "User not found"
         });
     }
+
+    console.log(user);
 
     return res.status(200).json({
         message: 'User fetched successfully',
@@ -177,7 +179,7 @@ export async function verifyEmail(req, res) {
     <h1>Email Verified Successfully</h1>
     <p>Hi <strong>${user.username}</strong>,</p>
     <p>Your email has been verified successfully. You can now log in to your account and start using SeeklyAI.</p>
-    <a href="http://localhost:3000/login">Go to Login</a>
+    <a href="https://http://localhost:5174/login">Go to Login</a>
     `;
         res.send(html);
     }
